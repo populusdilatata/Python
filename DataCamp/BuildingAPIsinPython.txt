@@ -1,0 +1,32 @@
+# Import required packages/libraries
+import pandas as pd
+import requests
+
+# Read the CSV file into a DataFrame
+orders = pd.read_csv('data/orders-2024-01-21.csv')
+
+# Get exchange rates from API
+request_url = 'https://api.vatcomply.com/rates'
+params = {
+    'date' : '2024-01-21',
+    'base': 'USD'
+} 
+response = requests.get(request_url, params=params)
+rates = response.json()['rates']
+
+# Apply exchange rates
+orders['exchange_rate'] = orders['currency'].map(rates)
+
+# Alternatively, manually create each of the exchange_rate values in the DataFrame, e.g.,
+# orders['exchange_rate'] = 0
+# orders.loc[orders['currency'] == 'EUR', 'exchange_rate'] = rates['EUR'] 
+# orders.loc[orders['currency'] == 'GBP', 'exchange_rate'] = rates['GBP']
+# orders.loc[orders['currency'] == 'USD', 'exchange_rate'] = rates['USD']
+
+# Calculate sales in US dollars
+orders['amount_usd'] = orders['amount'] * orders['exchange_rate']
+
+# Find the total amount of sales in US dollars
+total_usd_sales = orders['amount_usd'].sum()
+
+print(total_usd_sales)
