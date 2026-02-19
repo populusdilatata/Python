@@ -1,0 +1,9 @@
+Pong analysis:
+1. Create the screen
+2. Create and move a paddle
+3. Create another paddle
+4. Create the ball and make it move
+4.bDetect collision with wall and bounce
+4.cDetect collision with paddle
+4.dDetect when paddle misses
+5. Keep score
